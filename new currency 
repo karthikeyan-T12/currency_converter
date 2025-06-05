@@ -1,78 +1,15 @@
-from currency_converter import CurrencyConverter
-import tkinter as tk
-import openai
-
-# Set your OpenAI API key here
-openai.api_key = "YOUR_API_KEY"  # ← Replace this with your actual key
-
-# Currency Converter object
-c = CurrencyConverter()
-
-def ask_openai(question):
+def convert_btc_to_inr():
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant and currency expert."},
-                {"role": "user", "content": question}
-            ]
+        btc_amount = float(entry_btc.get())
+        rate_btc_to_inr = btc.get_previous_price('INR')  # get live BTC → INR rate
+        inr_value = btc_amount * rate_btc_to_inr
+        label_btc_result.config(
+            text=f"{btc_amount} BTC  =  ₹{round(inr_value, 2)} INR"
         )
-        return response['choices'][0]['message']['content']
+        listbox_history.insert(
+            tk.END, f"{btc_amount} BTC ➜ ₹{round(inr_value, 2)} INR"
+        )
+    except ValueError:
+        label_btc_result.config(text="Enter a valid number for BTC.")
     except Exception as e:
-        return f"OpenAI Error: {e}"
-
-def convert_currency():
-    try:
-        amount = float(entry_amount.get())
-        from_currency = entry_from.get().upper()
-        to_currency = entry_to.get().upper()
-        result = c.convert(amount, from_currency, to_currency)
-        label_result.config(text=f"{amount} {from_currency} = {round(result, 2)} {to_currency}")
-        listbox_history.insert(tk.END, f"{amount} {from_currency} ➜ {round(result, 2)} {to_currency}")
-    except Exception as e:
-        label_result.config(text=f"Error: {e}")
-
-def swap_currencies():
-    temp = entry_from.get()
-    entry_from.delete(0, tk.END)
-    entry_from.insert(0, entry_to.get())
-    entry_to.delete(0, tk.END)
-    entry_to.insert(0, temp)
-
-def get_ai_help():
-    question = f"How do I convert {entry_amount.get()} {entry_from.get()} to {entry_to.get()}?"
-    answer = ask_openai(question)
-    label_result.config(text=answer)
-
-# GUI setup
-window = tk.Tk()
-window.title("💱 AI-Powered Currency Converter")
-window.geometry("600x500")
-window.configure(bg="#f7faff")
-
-tk.Label(window, text="Currency Converter with AI", font="Helvetica 20 bold", bg="#f7faff").pack(pady=20)
-
-tk.Label(window, text="Amount:", font="Helvetica 14", bg="#f7faff").place(x=50, y=80)
-entry_amount = tk.Entry(window, width=20)
-entry_amount.place(x=200, y=85)
-
-tk.Label(window, text="From Currency (e.g. USD):", font="Helvetica 14", bg="#f7faff").place(x=50, y=130)
-entry_from = tk.Entry(window, width=20)
-entry_from.place(x=300, y=135)
-
-tk.Label(window, text="To Currency (e.g. INR):", font="Helvetica 14", bg="#f7faff").place(x=50, y=180)
-entry_to = tk.Entry(window, width=20)
-entry_to.place(x=300, y=185)
-
-tk.Button(window, text="Convert", font="Helvetica 14", command=convert_currency).place(x=150, y=240)
-tk.Button(window, text="Swap", font="Helvetica 14", command=swap_currencies).place(x=250, y=240)
-tk.Button(window, text="Ask AI Help", font="Helvetica 14", command=get_ai_help).place(x=330, y=240)
-
-label_result = tk.Label(window, text="", font="Helvetica 14 bold", fg="blue", bg="#f7faff")
-label_result.place(x=150, y=300)
-
-tk.Label(window, text="Conversion History:", font="Helvetica 14", bg="#f7faff").place(x=50, y=350)
-listbox_history = tk.Listbox(window, width=60, height=6)
-listbox_history.place(x=50, y=380)
-
-window.mainloop()
+        label_btc_result.config(text=f"Error: {e}")
