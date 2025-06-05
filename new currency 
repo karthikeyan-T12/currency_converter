@@ -1,15 +1,20 @@
+import requests
+
 def convert_btc_to_inr():
     try:
         btc_amount = float(entry_btc.get())
-        rate_btc_to_inr = btc.get_previous_price('INR')  # get live BTC → INR rate
+        url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=inr"
+        response = requests.get(url, timeout=5)
+        data = response.json()
+        rate_btc_to_inr = data["bitcoin"]["inr"]
         inr_value = btc_amount * rate_btc_to_inr
         label_btc_result.config(
-            text=f"{btc_amount} BTC  =  ₹{round(inr_value, 2)} INR"
+            text=f"{btc_amount} BTC = ₹{round(inr_value, 2)} INR"
         )
         listbox_history.insert(
             tk.END, f"{btc_amount} BTC ➜ ₹{round(inr_value, 2)} INR"
         )
     except ValueError:
-        label_btc_result.config(text="Enter a valid number for BTC.")
+        label_btc_result.config(text="Enter a valid BTC number.")
     except Exception as e:
         label_btc_result.config(text=f"Error: {e}")
