@@ -2,30 +2,20 @@ import tkinter as tk
 from tkinter import ttk
 from currency_converter import CurrencyConverter
 from forex_python.bitcoin import BtcConverter
+import requests
 
-# ─── GLOBAL SETUP ────────────────────────────────────────────────────────────
+converter = CurrencyConverter()
 
-# Fiat currency converter (USD, INR, EUR, etc.)
-fiat_converter = CurrencyConverter()
-
-# Crypto (Bitcoin → INR) converter
 btc=BtcConverter()
 
-# List of all fiat currencies, sorted alphabetically
-currency_list = sorted(fiat_converter.currencies)
+currency_list = sorted(converter.currencies)
 
-
-# ─── FUNCTIONS ───────────────────────────────────────────────────────────────
-
-def convert_fiat():
-    """
-    Convert between any two fiat currencies (e.g. USD → INR, EUR → GBP).
-    """
+def convert_currency():
     try:
         amount = float(entry_amount.get())
         from_cur = combo_from.get()
         to_cur = combo_to.get()
-        result = fiat_converter.convert(amount, from_cur, to_cur)
+        result = converter.convert(amount, from_cur, to_cur)
         label_result.config(text=f"{amount} {from_cur}  =  {round(result, 2)} {to_cur}")
         listbox_history.insert(tk.END, f"{amount} {from_cur} ➜ {round(result, 2)} {to_cur}")
     except ValueError:
@@ -34,19 +24,13 @@ def convert_fiat():
         label_result.config(text=f"Error: {e}")
 
 
-def swap_fiat():
-    """
-    Swap the currently selected fiat currencies in the two comboboxes.
-    """
+def swap_currency():
     a = combo_from.get()
     b = combo_to.get()
     combo_from.set(b)
     combo_to.set(a)
 
-
-import requests
-
-def convert_btc_to_inr():
+def convert_bitcoine():
     try:
         btc_amount = float(entry_btc.get())
         url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=inr"
@@ -64,25 +48,22 @@ def convert_btc_to_inr():
         label_btc_result.config(text="Enter a valid BTC number.")
     except Exception as e:
         label_btc_result.config(text=f"Error: {e}")
-# ─── GUI SETUP ────────────────────────────────────────────────────────────────
+# GUI SETUP
 
 window = tk.Tk()
-window.title("💱 Currency Converter (Fiat + Bitcoin)")
+window.title("💱 Currency Converter ")
 window.geometry("700x650")
-window.configure(bg="#f7f9fc")
+window.configure(bg="#fafcf7")
 
 
-# ─── TITLE ───────────────────────────────────────────────────────────────────
+# TITLE
 
 tk.Label(
     window,
-    text="Currency Converter (Fiat + BTC → INR)",
+    text="Currency Converter ( CURRENCY+ BITCOINE)",
     font="Helvetica 22 bold",
     bg="#f7f9fc"
 ).pack(pady=20)
-
-
-# ─── FIAT CONVERSION SECTION ──────────────────────────────────────────────────
 
 # Amount Label & Entry
 tk.Label(
@@ -134,10 +115,10 @@ combo_to.set("INR")  # default
 # Convert & Swap Buttons
 tk.Button(
     window,
-    text="Convert Fiat",
+    text="Convert ",
     font="Helvetica 12",
     width=12,
-    command=convert_fiat
+    command=convert_currency
 ).place(x=250, y=235)
 
 tk.Button(
@@ -145,7 +126,7 @@ tk.Button(
     text="Swap",
     font="Helvetica 12",
     width=8,
-    command=swap_fiat
+    command=swap_currency
 ).place(x=370, y=235)
 
 # Result label for fiat conversion
@@ -160,7 +141,7 @@ label_result = tk.Label(
 label_result.place(x=40, y=290)
 
 
-# ─── BTC → INR SECTION ────────────────────────────────────────────────────────
+#BTC → INR SECTION 
 
 tk.Label(
     window,
@@ -186,7 +167,7 @@ tk.Button(
     text="Convert BTC → INR",
     font="Helvetica 12",
     width=16,
-    command=convert_btc_to_inr
+    command=convert_bitcoine
 ).place(x=250, y=445)
 
 # Result label for BTC conversion
@@ -201,19 +182,19 @@ label_btc_result = tk.Label(
 label_btc_result.place(x=40, y=500)
 
 
-# ─── CONVERSION HISTORY ───────────────────────────────────────────────────────
+#CONVERSION HISTORY 
 
 tk.Label(
     window,
     text="Conversion History:",
     font="Helvetica 14",
-    bg="#f7f9fc"
+    bg="#f5f8f8"
 ).place(x=40, y=550)
 
 listbox_history = tk.Listbox(window, width=80, height=6, font="Helvetica 12")
 listbox_history.place(x=40, y=580)
 
 
-# ─── START MAIN LOOP ─────────────────────────────────────────────────────────
+#START MAIN LOOP 
 
 window.mainloop()
