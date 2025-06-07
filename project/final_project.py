@@ -44,6 +44,14 @@ def convert_bitcoine():
         listbox_history.insert(
             tk.END, f"{btc_amount} BTC ➜ ₹{round(inr_value, 2)} INR"
         )
+    except requests.exceptions.HTTPError as errh:
+        label_btc_result.config(text="The server said: This page doesn’t exist (like 404, 500)..") 
+    except requests.exceptions.ConnectionError as errc:
+        label_btc_result.config(text="Your internet is off, or the server is unreachable.")
+    except requests.exceptions.Timeout as errt:
+        label_btc_result.config(text="API took too long to reply.")
+    except requests.exceptions.RequestException as err:
+        label_btc_result.config(text="Any unknown error. Catch-all.")
     except ValueError:
         label_btc_result.config(text="Enter a valid BTC number.")
     except Exception as e:
