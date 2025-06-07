@@ -164,27 +164,37 @@ tk.Button(
 ).place(x=150, y=100)
 
 label_btc_result = tk.Label(btc_frame, text="", font="Helvetica 13 bold", fg="#800000", bg="#f1fbfa", wraplength=560)
-label_btc_result.place(x=10, y=140)
+label_btc_result.place(x=140, y=135)
 
 # -------- History --------
 tk.Label(
     window, 
     text="Conversion History:", 
     font="Helvetica 14", 
-    bg="#eaf6f6", 
+    bg="#eaf6f6",
     fg="#333"
 ).place(x=40, y=530)
 
-listbox_history = tk.Listbox(window, width=80, height=6, font="Helvetica 12", bg="#fdfdfd", fg="#333",
-                             bd=0, highlightthickness=1, highlightbackground="#cfcfcf")
+listbox_history = tk.Listbox(window, 
+                             width=69, 
+                             height=6, 
+                             font="Helvetica 12", 
+                             bg="#ffffff", 
+                             fg="#333",
+                             bd=0, 
+                             highlightthickness=1, 
+                             highlightbackground="#cfcfcf")
 listbox_history.place(x=40, y=560)
 
 tk.Button(
     window,
     text="Clear History",
     font="Helvetica 12",
+    bg="#708A00",
+    fg="#8F0000",
+    relief=tk.FLAT,
     command=clear_history
-).place(x=570, y=580)
+).place(x=558, y=560)
 
 
 # Main loop
