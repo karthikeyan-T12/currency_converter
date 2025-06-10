@@ -57,10 +57,10 @@ def convert_bitcoine():
     except Exception as e:
         label_btc_result.config(text=f"Error: {e}")
 
-# -------- GUI SETUP --------
+#----------- GUI SETUP -----------#
 window = tk.Tk()
 window.title("💱 Currency Converter ")
-window.geometry("700x650")
+window.geometry("700x680")
 window.configure(bg="#eaf6f6") 
 
 # Title
@@ -111,6 +111,7 @@ combo_to.place(x=250, y=185)
 combo_to.set("INR")
 
 # Convert and Swap Buttons
+
 tk.Button(
     window, 
     text="Convert", 
@@ -137,7 +138,8 @@ tk.Button(
 label_result = tk.Label(window, text="", font="Helvetica 14 bold", fg="#006400", bg="#eaf6f6", wraplength=600)
 label_result.place(x=40, y=290)
 
-# -------- BTC SECTION --------
+# -------- BTC SECTION --------#
+
 btc_frame = tk.Frame(window, bg="#f1fbfa", bd=2, relief=tk.GROOVE)
 btc_frame.place(x=40, y=340, width=620, height=170)
 
@@ -174,7 +176,8 @@ tk.Button(
 label_btc_result = tk.Label(btc_frame, text="", font="Helvetica 13 bold", fg="#800000", bg="#f1fbfa", wraplength=560)
 label_btc_result.place(x=140, y=135)
 
-# -------- History --------
+# -------- History --------#
+
 tk.Label(
     window, 
     text="Conversion History:", 
@@ -198,12 +201,11 @@ tk.Button(
     window,
     text="Clear History",
     font="Helvetica 12",
-    bg="#708A00",
-    fg="#8F0000",
+    bg="yellow",
+    fg="#000000",
     relief=tk.FLAT,
     command=clear_history
-).place(x=558, y=560)
-
+).place(x=558, y=530)
 
 # Main loop
 window.mainloop()
